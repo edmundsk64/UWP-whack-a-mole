@@ -1,0 +1,19 @@
+﻿<Page x:Class="_3080.GameEndPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:_3080"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="GameEndPage">
+    <Viewbox>
+        <Grid Height="900" Width="1600" Background="White">
+            <TextBox x:Name="endText" IsReadOnly="True" IsEnabled="False" FontSize="150" HorizontalAlignment="Left" Height="180" TextWrapping="Wrap" Text="Game End!" VerticalAlignment="Top" Width="776" Margin="373,45,0,0" BorderThickness="0"/>
+            <Button x:Name="tryAgainbutton" Click="tryAgainbutton_Click" FontSize="80" Content="Try Again" HorizontalAlignment="Left" VerticalAlignment="Top" Width="422" Height="159" Margin="563,640,0,0"/>
+            <TextBox x:Name="ScoreTextText" FontSize="100" HorizontalAlignment="Left" Height="127" TextWrapping="Wrap" Text="Your Score is " VerticalAlignment="Top" Width="592" Margin="219,373,0,0" BorderThickness="0"/>
+            <TextBox x:Name="ScoreText" FontSize="100" HorizontalAlignment="Left" Height="127" TextWrapping="Wrap" Text="99" VerticalAlignment="Top" Width="592" Margin="837,373,0,0" BorderThickness="0" />
+
+        </Grid>
+    </Viewbox>
+</Page>
