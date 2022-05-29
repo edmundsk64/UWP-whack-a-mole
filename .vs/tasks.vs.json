@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-3080",
+      "appliesTo": "3080/3080.sln",
+      "type": "launch"
+    }
+  ]
+}

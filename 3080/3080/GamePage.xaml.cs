@@ -11,113 +11,118 @@ namespace _3080
     /// </summary>
     public partial class GamePage : Page
     {
-        int timeNow = 0;
-        int maxGameTime = 5;
-        int currentNoOfMoles = 0;
-        int maxNoOfMoles;
-        double maxAppearTime = 5;
-        double currentLevel;
-        Button[] holes = new Button[9];
-        int[] counters = new int[9];
-        DispatcherTimer timer = new DispatcherTimer();
+        private const int V = 0;
+        private int timeNow = 0;
+        private readonly int maxGameTime = 30;
+        private int currentNoOfMoles = V;
+        private readonly int maxNoOfMoles;
+        private readonly double maxAppearTime = 5;
+        private readonly double currentLevel;
+
+        public DispatcherTimer Timer { get; } = new DispatcherTimer();
+
+        public Button[] Holes { get; } = new Button[9];
+
+        public int[] Counters { get; } = new int[9];
+
         public GamePage()
         {
             InitializeComponent();
-            currentLevel = (double) int.Parse(levelText.Text);
-            maxNoOfMoles = (int) Math.Ceiling(currentLevel / 2);
+            currentLevel = int.Parse(levelText.Text);
+            maxNoOfMoles = (int)Math.Ceiling(currentLevel / 2);
 
-            for (int i = 0; i < holes.Length; i++)
+            for (int i = 0; i < Holes.Length; i++)
             {
-                holes[i] = grid.Children[i] as Button;
-                counters[i] = (int)maxAppearTime;
+                Holes[i] = (Button)grid.Children[i];
+                Counters[i] = (int)maxAppearTime;
             }
 
-            timer.Interval = new TimeSpan(0, 0, 1); //in Hour, Minutes, Second.
-            timer.Tick += timer_Tick;
+            Timer.Interval = new TimeSpan(0, 0, 1); //in Hour, Minutes, Second.
+            Timer.Tick += Timer_Tick;
 
-            timer.Start();
+            Timer.Start();
         }
 
-        private void holeSelect()
+        private void HoleSelect()
         {
             Random rnd = new Random();
-            int noOfMolesAppear = rnd.Next(0, maxNoOfMoles  + 1);
-            
-            for(int i = 0; i <= noOfMolesAppear; i++)
+            int noOfMolesAppear = rnd.Next(0, maxNoOfMoles + 1);
+
+            for (int i = noOfMolesAppear; i >= 0; i--)
             {
-                int nextHole = rnd.Next(1, holes.Length + 1) - 1;
+                int nextHole = rnd.Next(1, Holes.Length + 1) - 1;
 
                 if (currentNoOfMoles >= maxNoOfMoles) break;
-                if (!holes[nextHole].IsEnabled) holeHighlight(nextHole);
+                if (!Holes[nextHole].IsEnabled) HoleHighlight(nextHole);
 
                 i--;
             }
         }
 
-        private void holeHighlight(int holeIndex)
+        private void HoleHighlight(int holeIndex)
         {
-            holes[holeIndex].IsEnabled = true;
-            holes[holeIndex].Background = new SolidColorBrush(Color.FromArgb(255, 48, 179, 221));
+            Holes[holeIndex].IsEnabled = true;
+            Holes[holeIndex].Background = new SolidColorBrush(Color.FromArgb(255, 48, 179, 221));
 
             currentNoOfMoles++;
         }
 
-        private void holeUnhighlight(Button hole)
+        private void HoleUnhighlight(Button hole)
         {
             hole.IsEnabled = false;
             
             currentNoOfMoles--;
         }
-        private void timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             clockTime.Content = maxGameTime - timeNow;
             timeNow++;
 
-            for(int i = 0; i < holes.Length; i++)
+            for(int i = 0; i < Holes.Length; i++)
             {
-                if (!holes[i].IsEnabled) continue;
-                if(counters[i] == 0)
+                if (!Holes[i].IsEnabled) continue;
+                if(Counters[i] == 0)
                 {
                     App.missCount++;  
-                    holeUnhighlight(holes[i]);
-                    resetCounter(i);
+                    HoleUnhighlight(Holes[i]);
+                    ResetCounter(i);
                 }
 
-                counters[i]--;
+                Counters[i]--;
             }
 
-            if (currentNoOfMoles < maxNoOfMoles) holeSelect();
+            if (currentNoOfMoles < maxNoOfMoles) HoleSelect();
 
             if (timeNow == maxGameTime + 1)
             {
-                timer.Stop();
-                gameFinished();
+                Timer.Stop();
+                GameFinished();
             }
         }
 
-        private void gameFinished()
+        private void GameFinished()
         {
             this.NavigationService.Navigate(new Uri("GameEndPage.xaml", UriKind.Relative));
         }
  
-        private void levelText_TextChanged(object sender, TextChangedEventArgs e)
+        private void LevelText_TextChanged(object sender, TextChangedEventArgs e)
         {
             levelText.Text = App.gameLevel.ToString();
         }
         
-        private void resetCounter(int holeIndex)
+        private void ResetCounter(int holeIndex)
         {
-            counters[holeIndex] = (int)maxAppearTime;
+            Counters[holeIndex] = (int)maxAppearTime;
         }
 
-        private void onButtonMouseClick(object sender, RoutedEventArgs e)
+        private void OnButtonMouseClick(object sender, RoutedEventArgs e)
         {
             Button hole = sender as Button;
             int holeIndex = int.Parse(hole.Content.ToString()) - 1;
 
             App.hitCount++;
-            resetCounter(holeIndex);
-            holeUnhighlight(hole);
+            ResetCounter(holeIndex);
+            HoleUnhighlight(hole);
         }
     }
 }
